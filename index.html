@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta name="description" content="MeshXL: Neural Coordinate Field for Generative 3D Foundation Models">
+    <meta name="keywords" content="MeshXL, 3D mesh, 3D foudnation model, generation">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MeshXL</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/imgs/icon.jpg">
+
+  <style>
+    .render_wrapper {
+        position: relative;
+        height: 350px;
+    }
+    .render_div {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    /*.external-link {*/
+    /*color: #ffffff !important; */
+    /*background-color: rgb(104, 161, 135) !important;*/
+    /*border-radius: 10px !important;*/
+    /*font-size: 12px !important;*/
+    /*}*/
+
+    /*.external-link .icon {*/
+    /*font-size: 20px !important;*/
+    /*}*/
+
+    /*.external-link:hover {*/
+    /*background-color: #555555 !important;*/
+    /*}*/
+
+    /*.conference {*/
+    /*font-family: 'Google Sans', sans-serif;*/
+    /*color: hsl(240, 2%, 10%) !important;*/
+    /*font-family: 'Merriweather', serif;*/
+    /*font-weight: 500;*/
+    /*}*/
+
+    .results-carousel textbox {
+    font-size: 7px;
+    font-family: 'Google Sans', cursive, sans-serif;
+    color: hsl(321, 56%, 56%) !important;
+    }
+    .dialog-box {
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(96, 85, 85, 0.494);
+        padding: 10px;
+        border-radius: 15px;
+        z-index: 1000;
+        font-size: 14px;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        color: hsl(322, 33%, 22%) !important;
+        font-weight: bold;
+    }
+  </style>
+
+  <!-- Import the component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <!-- scripts and css for MVDream -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./static/css/styles.css">
+  <script src="./static/js/video_comparison.js"></script>
+
+</head>
+<body>
+
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <h1 class="title is-1 publication-title">MeshXL: Neural Coordinate Field for Generative 3D Foundation Models</h1>
+
+                    <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                            <a href="https://ch3cook-fdu.github.io/">Sijin Chen</a><sup>1,2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://chenxin.tech/">Xin Chen</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="">Anqi Pang</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://april.zju.edu.cn/team/xianfang-zeng/">Xianfang Zeng</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://wchengad.github.io/">Wei Cheng</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="">Yijun Fu</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://fukunyin.github.io/">Fukun Yin</a><sup>1,2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="">Yanru Wang</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="">Zhibin Wang</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://icoz69.github.io/">Chi Zhang</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="http://www.yu-jingyi.com/cv/">Jingyi Yu</a><sup>3</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://www.skicyyu.org/">Gang Yu</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="">Bin Fu</a><sup>2</sup>,
+                            </span>
+                        <span class="author-block">
+                            <a href="https://eetchen.github.io/">Tao Chen</a><sup>1</sup>
+                            </span>
+                    </div>
+
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"><sup>1</sup>Fudan University,</span>
+                        <span class="author-block"><sup>2</sup>Tencent PCG,</span>
+                        <span class="author-block"><sup>3</sup>ShanghaiTech University</span>
+                    </div>
+
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+                          <span class="link-block">
+                            <a href="https://arxiv.org/abs/2405.20853"
+                               class="external-link button is-normal is-rounded is-dark">
+                              <span class="icon">
+                                  <i class="ai ai-arxiv"></i>
+                              </span>
+                              <span>arXiv</span>
+                            </a>
+                          </span>
+                            <!-- Code Link. -->
+                            <span class="link-block">
+                            <a href="https://github.com/OpenMeshLab/MeshXL"
+                               class="external-link button is-normal is-rounded is-dark">
+                              <span class="icon">
+                                  <i class="fab fa-github"></i>
+                              </span>
+                              <span>Code</span>
+                              </a>
+                          </span>
+                            <!-- Video Link. -->
+                            <span class="link-block">
+                            <a href=""
+                               class="external-link button is-normal is-rounded is-dark">
+                              <span class="icon">
+                                  <i class="fab fa-youtube"></i>
+                              </span>
+                              <span>Video</span>
+                            </a>
+                          </span>
+                        </div>
+                    </div>
+
+                    <div class="is-size-5 publication-authors">
+                        <video id="teaser" autoplay muted playsinline height="100%">
+                            <source src="./static/videos/MeshXL_Video.mp4"
+                                    type="video/mp4">
+                        </video>
+                        <h2 class="subtitle has-text-centered">
+                            MeshXL is a family of generative pre-trained foundation models for 3D mesh generation. 
+                            With the Neural Coordinate Field representation, the generation of unstructured 3D mesh data can be seaminglessly addressed by modern LLM methods.
+                        </h2>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Abstract</h2>
+                <div class="content has-text-justified">
+                    <p>
+                        The polygon mesh representation of 3D data exhibits great flexibility, fast rendering speed, and storage efficiency, 
+                        which is widely preferred in various applications. However, given its unstructured graph representation, 
+                        the direct generation of high-fidelity 3D meshes is challenging. Fortunately, with a pre-defined ordering strategy, 
+                        3D meshes can be represented as sequences, and the generation process can be seamlessly treated as an auto-regressive problem. 
+                        In this paper, we validate the Neural Coordinate Field (NeurCF), an explicit coordinate representation with implicit neural embeddings, 
+                        is a simple-yet-effective representation for large-scale sequential mesh modeling. 
+                        After that, <span style="color: #ff3860">we present MeshXL, a family of generative pre-trained auto-regressive models, which addresses the process of 3D mesh generation 
+                        with modern large language model approaches</span>. Extensive experiments show that MeshXL is able to generate high-quality 3D meshes, 
+                        and can also serve as foundation models for various down-stream applications.
+                    </p>
+                </div>
+                <img src="./static/imgs/overview.png"/>
+            </div>
+        </div>
+        <!--/ Abstract. -->
+
+        <!-- Paper video. -->
+        <!-- <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Video</h2>
+                <div class="content has-text-centered">
+                    <video id="replay-video1"
+                           autoplay
+                           loop
+                           controls
+                           muted
+                           preload
+                           playsinline
+                           width="100%">
+                        <source src="./static/videos/video_demo_full_c.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div> -->
+        <!--/ Paper video. -->
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Scaling Up Generative Mesh Pre-training</h2>
+                <div class="content has-text-justified">
+                    <p>
+                        After combining 3D data from <a href="https://shapenet.org/">ShapeNet</a>, 
+                        <a href="https://tianchi.aliyun.com/specials/promotion/alibaba-3d-future">3D-FUTURE</a>, 
+                        <a href="https://github.com/allenai/objaverse-xl">Objaverse, and Objaverse-XL</a>,
+                        we obtain a total of over <span style="color: #ff3860">2.5 million</span> 3D object meshes 
+                        for the generative mesh pre-training.
+                        We analyze the scaling effects of model parameters. 
+                        We train all the models from scratch on 150 billion tokens, 
+                        and observe that the performance grows with model sizes.
+                    </p>
+                </div>
+                <img src="./static/imgs/scale_law.png"/>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!---------------------------------------------Functions Start-------------------------------------------------->
+<script>
+    function createRadioButtons_image(name) {
+        const createRadioButton = (value, label, checked = false) => {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = name;
+            input.value = value;
+            input.checked = checked;
+            input.style.opacity = "0";
+            input.id = value + name; 
+            input.style.position = 'absolute'; 
+
+            const labelElement = document.createElement('label'); 
+            labelElement.htmlFor = input.id; 
+
+            const span = document.createElement('span');
+            span.innerHTML = label;
+
+            labelElement.appendChild(input);
+            labelElement.appendChild(span);
+
+            const div = document.createElement('div');
+            div.appendChild(labelElement);
+
+            return div;
+        };
+
+        return [
+            createRadioButton('texture', 'texture', true), // Default to texture
+            createRadioButton('mesh', 'mesh'),
+            createRadioButton('image', 'Show image')
+        ];
+    }
+
+    function createRadioButtons_uncondition(name) {
+        const createRadioButton = (value, label, checked = false) => {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = name;
+            input.value = value;
+            input.checked = checked;
+            input.style.opacity = "0";
+            input.id = value + name; 
+            input.style.position = 'absolute'; 
+
+            const labelElement = document.createElement('label'); 
+            labelElement.htmlFor = input.id; 
+
+            const span = document.createElement('span');
+            span.innerHTML = label;
+
+            labelElement.appendChild(input);
+            labelElement.appendChild(span);
+
+            const div = document.createElement('div');
+            div.appendChild(labelElement);
+
+            return div;
+        };
+
+        return [
+            createRadioButton('texture', 'texture', true), // Default to texture
+            createRadioButton('mesh', 'mesh')
+        ];
+    }
+
+    function createImageElement(src) {
+        const imageElement = document.createElement('img');
+        imageElement.src = src;
+        imageElement.style.display = "none"; 
+        imageElement.style.width = '100%';
+        imageElement.style.height = '100%';
+        return imageElement;
+    }
+
+    function createModelView_image(modelPath, index) {
+        const modelDiv = document.createElement('div');
+        modelDiv.className = 'item render_wrapper';
+        
+        // Create and append Model Viewer
+        const modelViewerDiv = document.createElement('div');
+        modelViewerDiv.className = 'render_wrapper';
+        const modelViewer = document.createElement('model-viewer');
+        // ... set modelViewer properties ...
+        modelViewer.src = modelPath;
+        modelViewer.alt = 'Description of model';
+        modelViewer.setAttribute('auto-rotate', '');
+        modelViewer.setAttribute('camera-controls', '');
+        modelViewer.style.width = '100%';
+        modelViewer.style.height = '100%';
+        modelViewer.style.backgroundColor = 'transparent';
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 3m');
+
+        const imageElement = createImageElement("./images/" + modelPath + ".png");
+        const radioButtons = createRadioButtons_image('display-option-' + index);
+        const updateColors = () => {
+            radioButtons.forEach(rb => {
+                rb.querySelector('span').style.color = rb.querySelector('input').checked ? 'green' : 'blue';
+                rb.querySelector('span').style.opacity = rb.querySelector('input').checked ? 1 : 0.2;
+            });
+        };
+
+        
+        radioButtons.forEach(radioButton => {
+            radioButton.querySelector('input').addEventListener('change', updateColors);
+        });
+        updateColors();
+
+        let originalTexture = null;
+        modelViewer.addEventListener('load', function() {
+            const material = modelViewer.model.materials[0];
+            originalTexture = material.pbrMetallicRoughness.baseColorTexture.texture;
+        });
+
+        radioButtons[0].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(originalTexture);
+                modelViewer.style.display = "block";
+                imageElement.style.display = "none";
+            }
+        });
+        radioButtons[1].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
+                modelViewer.style.display = "block";
+                imageElement.style.display = "none";
+
+            }
+        });
+        radioButtons[2].querySelector('input').addEventListener('change', function() {
+            if (this.checked) {
+                modelViewer.style.display = "none";
+                imageElement.style.display = "block";
+            }
+        });
+
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'controls';
+        radioButtons.forEach(radioButton => controlsDiv.appendChild(radioButton));
+        modelDiv.appendChild(controlsDiv);
+
+        modelDiv.appendChild(imageElement);
+        modelDiv.appendChild(modelViewer); // Append model viewer first
+        modelDiv.appendChild(modelViewerDiv);
+
+        return modelDiv;
+    }
+
+    function createModelView_uncondition(modelPath, index) {
+        const modelDiv = document.createElement('div');
+        modelDiv.className = 'item render_wrapper';
+        
+        // Create and append Model Viewer
+        const modelViewerDiv = document.createElement('div');
+        modelViewerDiv.className = 'render_wrapper';
+        const modelViewer = document.createElement('model-viewer');
+        // ... set modelViewer properties ...
+        modelViewer.src = modelPath;
+        modelViewer.alt = 'Description of model';
+        modelViewer.setAttribute('auto-rotate', '');
+        modelViewer.setAttribute('camera-controls', '');
+        modelViewer.style.width = '100%';
+        modelViewer.style.height = '100%';
+        modelViewer.style.backgroundColor = 'transparent';
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 3m');
+
+
+        const radioButtons = createRadioButtons_uncondition('display-option-' + index);
+        const updateColors = () => {
+            radioButtons.forEach(rb => {
+                rb.querySelector('span').style.color = rb.querySelector('input').checked ? 'green' : 'blue';
+                rb.querySelector('span').style.opacity = rb.querySelector('input').checked ? 1 : 0.2;
+            });
+        };
+
+        
+        radioButtons.forEach(radioButton => {
+            radioButton.querySelector('input').addEventListener('change', updateColors);
+        });
+        updateColors();
+
+        let originalTexture = null;
+        modelViewer.addEventListener('load', function() {
+            const material = modelViewer.model.materials[0];
+            originalTexture = material.pbrMetallicRoughness.baseColorTexture.texture;
+        });
+
+        radioButtons[0].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(originalTexture);
+                modelViewer.style.display = "block";
+            }
+        });
+        radioButtons[1].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
+                modelViewer.style.display = "block";
+
+            }
+        });
+
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'controls';
+        radioButtons.forEach(radioButton => controlsDiv.appendChild(radioButton));
+        modelDiv.appendChild(controlsDiv);
+
+        modelDiv.appendChild(modelViewer); // Append model viewer first
+        modelDiv.appendChild(modelViewerDiv);
+
+        return modelDiv;
+    }
+
+    function createModelView_text(modelPath, index) {
+        const modelDiv = document.createElement('div');
+        modelDiv.className = 'item render_wrapper';
+        
+        // Create and append Model Viewer
+        const modelViewerDiv = document.createElement('div');
+        modelViewerDiv.className = 'render_wrapper';
+        const modelViewer = document.createElement('model-viewer');
+        // ... set modelViewer properties ...
+        modelViewer.src = modelPath;
+        modelViewer.alt = 'Description of model';
+        modelViewer.setAttribute('auto-rotate', '');
+        modelViewer.setAttribute('camera-controls', '');
+        modelViewer.style.width = '100%';
+        modelViewer.style.height = '100%';
+        modelViewer.style.backgroundColor = 'transparent';
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 3m');
+
+        const radioButtons = createRadioButtons_uncondition('display-option-' + index);
+        const updateColors = () => {
+            radioButtons.forEach(rb => {
+                rb.querySelector('span').style.color = rb.querySelector('input').checked ? 'green' : 'blue';
+                rb.querySelector('span').style.opacity = rb.querySelector('input').checked ? 1 : 0.2;
+            });
+        };
+
+        
+        radioButtons.forEach(radioButton => {
+            radioButton.querySelector('input').addEventListener('change', updateColors);
+        });
+        updateColors();
+
+        let originalTexture = null;
+        modelViewer.addEventListener('load', function() {
+            const material = modelViewer.model.materials[0];
+            originalTexture = material.pbrMetallicRoughness.baseColorTexture.texture;
+        });
+
+        radioButtons[0].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(originalTexture);
+                modelViewer.style.display = "block";
+            }
+        });
+        radioButtons[1].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
+                modelViewer.style.display = "block";
+
+            }
+        });
+
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'controls';
+        radioButtons.forEach(radioButton => controlsDiv.appendChild(radioButton));
+
+        const dialogBox = document.createElement('div');
+        dialogBox.className = 'dialog-box';
+        dialogBox.style.position = 'absolute'; 
+        dialogBox.style.display = 'none'; 
+        dialogBox.style.top = '30px';  
+        dialogBox.style.right = '0';
+        
+        const descriptionCheckbox = document.createElement('input');
+        descriptionCheckbox.type = 'checkbox';
+        descriptionCheckbox.id = 'descriptionCheckbox-' + index;
+        descriptionCheckbox.style.opacity = "0";
+
+        const descriptionLabel = document.createElement('label'); 
+        descriptionLabel.htmlFor = descriptionCheckbox.id; 
+
+        const span = document.createElement('span');
+        span.innerHTML = 'Show Description';
+        span.style.position = 'relative';
+        span.style.top = '-7px';
+        span.style.marginLeft='10px';
+        span.style.whiteSpace = 'nowrap';
+
+        descriptionLabel.appendChild(span);
+
+
+        const descriptionText = "this is a test this is a test this is a test this is a test this is a test"; // 
+
+        descriptionCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                // dialogBox.innerHTML = descriptionText;
+                // dialogBox.style.display = 'block';
+                
+                fetch("./text/" + modelPath + ".txt")
+                    .then(response => response.text())
+                    .then(text => {
+                        dialogBox.innerHTML = text;
+                        dialogBox.style.display = 'block';
+                    })
+                    .catch(error => console.error(error));
+            } else {
+                dialogBox.style.display = 'none';
+            }
+        });
+
+        const checkboxWrapper = document.createElement('div');
+        checkboxWrapper.style.position = 'relative'; 
+        checkboxWrapper.appendChild(descriptionCheckbox);
+        checkboxWrapper.appendChild(dialogBox);
+        checkboxWrapper.appendChild(descriptionLabel);
+        controlsDiv.appendChild(checkboxWrapper); 
+
+        modelDiv.appendChild(controlsDiv);
+
+        modelDiv.appendChild(modelViewer); // Append model viewer first
+        modelDiv.appendChild(modelViewerDiv);
+
+        return modelDiv;
+    }
+
+    function createCarousel(modelPaths, resultsCarouselId, createModelViewFunction) {
+        const resultsCarousel = document.getElementById(resultsCarouselId);
+
+        modelPaths.forEach((modelPath, index) => {
+        const uniqueId = resultsCarouselId + '-model-' + index;
+        const modelDiv = createModelViewFunction(modelPath, uniqueId);
+        resultsCarousel.appendChild(modelDiv);
+        });
+    }
+
+
+</script>
+<!---------------------------------------------Functions Over-------------------------------------------------->
+
+<!--<section class="hero">-->
+<!--    <div class="hero-body">-->
+<!--        <div class="container is-max-desktop">-->
+<!--            <h1 class="title is-4">Unconditional texture generation</h1>-->
+<!--            <div id="results-carousel1" class="carousel results-carousel"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">Novel Shape Analysis: Shape Completion</h1>
+            <div id="results-carousel2" class="carousel results-carousel"></div>
+        </div>
+    </div>
+</section>
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">Text-condition texture generation</h1>
+            <div id="results-carousel3" class="carousel results-carousel"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // const modelPaths1 = [
+    // "a770cb6ad4a97df84abd45348d17aaf8",
+    // ];
+
+    const modelPaths2 = [
+        "shape_completion/1/partial.ply",
+        "shape_completion/1/complete_0.ply",
+        "shape_completion/1/complete_1.ply",
+        "shape_completion/1/complete_2.ply",
+        "shape_completion/1/complete_3.ply",
+    ];
+
+    const modelPaths3 = [
+        "Suzanne_monkey",
+        "Utah_teapot",
+        "be48f3f906ed431b98b1bf03ab7aadd6",
+        "0000c32fde7f45efb8d14e8ba737d50c",
+        "7abe9a2b33d6443d83b5d54e467aaac5",
+        "8cd40f962f2c440c9caf1db1a505357f",
+        "ae0831702eac462a9969ff4f8bd57710",
+        "nascar",
+    ];
+
+
+    // createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
+    createCarousel(modelPaths2, 'results-carousel2', createModelView_image);
+    createCarousel(modelPaths3, 'results-carousel3', createModelView_text);
+
+</script>
+
+
+<section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>@misc{chen2024meshxl,
+    title={MeshXL: Neural Coordinate Field for Generative 3D Foundation Models}, 
+    author={Sijin Chen and Xin Chen and Anqi Pang and Xianfang Zeng and Wei Cheng and Yijun Fu and Fukun Yin and Yanru Wang and Zhibin Wang and Chi Zhang and Jingyi Yu and Gang Yu and Bin Fu and Tao Chen},
+    year={2024},
+    eprint={2405.20853},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
+}</code></pre>
+    </div>
+</section>
+
+
+<footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content">
+                        <p style="text-align:center">
+                            Source code mainly borrowed from <a href="https://cvmi-lab.github.io/Point-UV-Diffusion/">Point-UV</a> and <a href="https://mv-dream.github.io/">MVDream</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

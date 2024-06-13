@@ -1,2 +1,3 @@
-# meshXL.github.io
-Project page for MeshXL.
+# MeshXL
+
+Project page for "MeshXL: Neural Coordinate Field for Generative 3D Foundation Models"
