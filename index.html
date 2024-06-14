@@ -353,8 +353,8 @@
         modelViewerDiv.className = 'render_wrapper';
         const modelViewer = document.createElement('model-viewer');
         // ... set modelViewer properties ...
-        modelViewer.src = modelPath;
-        modelViewer.alt = 'Description of model';
+        modelViewer.src = "./gallery/" + modelPath;
+        modelViewer.alt = 'D""escription of model';
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('camera-controls', '');
         modelViewer.style.width = '100%';
@@ -432,7 +432,7 @@
         modelViewerDiv.className = 'render_wrapper';
         const modelViewer = document.createElement('model-viewer');
         // ... set modelViewer properties ...
-        modelViewer.src = modelPath;
+        modelViewer.src = "./gallery/objaverse/" + modelPath + ".glb";
         modelViewer.alt = 'Description of model';
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('camera-controls', '');
@@ -628,14 +628,14 @@
 </script>
 <!---------------------------------------------Functions Over-------------------------------------------------->
 
-<!--<section class="hero">-->
-<!--    <div class="hero-body">-->
-<!--        <div class="container is-max-desktop">-->
-<!--            <h1 class="title is-4">Unconditional texture generation</h1>-->
-<!--            <div id="results-carousel1" class="carousel results-carousel"></div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
+<section class="hero">
+   <div class="hero-body">
+       <div class="container is-max-desktop">
+           <h1 class="title is-4">Unconditional 3D mesh generation</h1>
+           <div id="results-carousel1" class="carousel results-carousel"></div>
+       </div>
+   </div>
+</section>
 
 <section class="hero">
     <div class="hero-body">
@@ -656,16 +656,19 @@
 </section>
 
 <script>
-    // const modelPaths1 = [
-    // "a770cb6ad4a97df84abd45348d17aaf8",
-    // ];
+    const modelPaths1 = [
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+        "0e06763d63f44733b99c06ae18dcb13d",
+    ];
 
     const modelPaths2 = [
-        "shape_completion/1/partial.ply",
-        "shape_completion/1/complete_0.ply",
-        "shape_completion/1/complete_1.ply",
-        "shape_completion/1/complete_2.ply",
-        "shape_completion/1/complete_3.ply",
     ];
 
     const modelPaths3 = [
@@ -680,9 +683,7 @@
     ];
 
 
-    // createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
-    createCarousel(modelPaths2, 'results-carousel2', createModelView_image);
-    createCarousel(modelPaths3, 'results-carousel3', createModelView_text);
+    createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
 
 </script>
 
