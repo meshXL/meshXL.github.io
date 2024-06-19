@@ -492,7 +492,7 @@
         return modelDiv;
     }
 
-    function createModelView_texturing(modelPath, index) {
+    function createModelView_image(modelPath, index) {
         const modelDiv = document.createElement('div');
         modelDiv.className = 'item render_wrapper';
         
@@ -672,7 +672,7 @@
     ];
 
     createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
-    createCarousel(modelPaths3, 'results-carousel3', createModelView_texturing);
+    createCarousel(modelPaths3, 'results-carousel3', createModelView_image);
 
 </script>
 
