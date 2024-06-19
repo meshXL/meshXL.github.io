@@ -353,7 +353,7 @@
         modelViewerDiv.className = 'render_wrapper';
         const modelViewer = document.createElement('model-viewer');
         // ... set modelViewer properties ...
-        modelViewer.src = "./gallery/" + modelPath;
+        modelViewer.src = modelPath;
         modelViewer.alt = 'D""escription of model';
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('camera-controls', '');
@@ -552,14 +552,14 @@
 
 <script>
     const modelPaths1 = [
-        "00245",
-        "00299",
-        "00449",
-        "00451",
-        "00540",
-        "01730",
-        "01920",
-        "0000_0001_0001_generated"
+        "./gallery/00245",
+        "./gallery/00299",
+        "./gallery/00449",
+        "./gallery/00451",
+        "./gallery/00540",
+        "./gallery/01730",
+        "./gallery/01920",
+        "./pure-mesh/0000_0001_0001_generated"
     ];
 
     createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
