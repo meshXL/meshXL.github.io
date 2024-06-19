@@ -508,10 +508,10 @@
         modelViewer.style.width = '100%';
         modelViewer.style.height = '100%';
         modelViewer.style.backgroundColor = 'transparent';
-        modelViewer.setAttribute('camera-orbit', '50deg 75deg 10m');
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 3m');
 
-
-        const radioButtons = createRadioButtons_uncondition('display-option-' + index);
+        const imageElement = createImageElement("./images/" + modelPath + ".png");
+        const radioButtons = createRadioButtons_image('display-option-' + index);
         const updateColors = () => {
             radioButtons.forEach(rb => {
                 rb.querySelector('span').style.color = rb.querySelector('input').checked ? 'green' : 'blue';
@@ -538,6 +538,7 @@
                 const material = modelViewer.model.materials[0];
                 material.pbrMetallicRoughness.baseColorTexture.setTexture(originalTexture);
                 modelViewer.style.display = "block";
+                imageElement.style.display = "none";
             }
         });
         radioButtons[1].querySelector('input').addEventListener('change', function() {
@@ -547,6 +548,14 @@
                 const material = modelViewer.model.materials[0];
                 material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
                 modelViewer.style.display = "block";
+                imageElement.style.display = "none";
+
+            }
+        });
+        radioButtons[2].querySelector('input').addEventListener('change', function() {
+            if (this.checked) {
+                modelViewer.style.display = "none";
+                imageElement.style.display = "block";
             }
         });
 
@@ -555,20 +564,11 @@
         radioButtons.forEach(radioButton => controlsDiv.appendChild(radioButton));
         modelDiv.appendChild(controlsDiv);
 
+        modelDiv.appendChild(imageElement);
         modelDiv.appendChild(modelViewer); // Append model viewer first
         modelDiv.appendChild(modelViewerDiv);
 
         return modelDiv;
-    }
-
-    function createCarousel(modelPaths, resultsCarouselId, createModelViewFunction) {
-        const resultsCarousel = document.getElementById(resultsCarouselId);
-
-        modelPaths.forEach((modelPath, index) => {
-        const uniqueId = resultsCarouselId + '-model-' + index;
-        const modelDiv = createModelViewFunction(modelPath, uniqueId);
-        resultsCarousel.appendChild(modelDiv);
-        });
     }
 
 
