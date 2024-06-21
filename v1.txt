@@ -1,0 +1,152 @@
+    function createRadioButtons_image(name) {
+        const createRadioButton = (value, label, checked = false) => {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = name;
+            input.value = value;
+            input.checked = checked;
+            input.style.opacity = "0";
+            input.id = value + name; 
+            input.style.position = 'absolute'; 
+
+            const labelElement = document.createElement('label'); 
+            labelElement.htmlFor = input.id; 
+
+            const span = document.createElement('span');
+            span.innerHTML = label;
+
+            labelElement.appendChild(input);
+            labelElement.appendChild(span);
+
+            const div = document.createElement('div');
+            div.appendChild(labelElement);
+
+            return div;
+        };
+
+        return [
+            createRadioButton('texture', 'texture', true), // Default to texture
+            createRadioButton('mesh', 'mesh'),
+            createRadioButton('image', 'Show image')
+        ];
+    }
+
+    function createRadioButtons_uncondition(name) {
+        const createRadioButton = (value, label, checked = false) => {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = name;
+            input.value = value;
+            input.checked = checked;
+            input.style.opacity = "0";
+            input.id = value + name; 
+            input.style.position = 'absolute'; 
+
+            const labelElement = document.createElement('label'); 
+            labelElement.htmlFor = input.id; 
+
+            const span = document.createElement('span');
+            span.innerHTML = label;
+
+            labelElement.appendChild(input);
+            labelElement.appendChild(span);
+
+            const div = document.createElement('div');
+            div.appendChild(labelElement);
+
+            return div;
+        };
+
+        return [
+            createRadioButton('texture', 'texture', true), // Default to texture
+            createRadioButton('mesh', 'mesh')
+        ];
+    }
+
+    function createImageElement(src) {
+        const imageElement = document.createElement('img');
+        imageElement.src = src;
+        imageElement.style.display = "none"; 
+        imageElement.style.width = '100%';
+        imageElement.style.height = '100%';
+        return imageElement;
+    }
+
+    function createModelView_image(modelPath, index) {
+        const modelDiv = document.createElement('div');
+        modelDiv.className = 'item render_wrapper';
+        
+        // Create and append Model Viewer
+        const modelViewerDiv = document.createElement('div');
+        modelViewerDiv.className = 'render_wrapper';
+        const modelViewer = document.createElement('model-viewer');
+        // ... set modelViewer properties ...
+        modelViewer.src = "./image_models/" + modelPath + ".glb";
+        modelViewer.alt = 'Description of model';
+        modelViewer.setAttribute('auto-rotate', '');
+        modelViewer.setAttribute('camera-controls', '');
+        modelViewer.style.width = '100%';
+        modelViewer.style.height = '100%';
+        modelViewer.style.backgroundColor = 'transparent';
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 10m');
+
+        const imageElement = createImageElement("./images/" + modelPath + ".png");
+        const radioButtons = createRadioButtons_image('display-option-' + index);
+        const updateColors = () => {
+            radioButtons.forEach(rb => {
+                rb.querySelector('span').style.color = rb.querySelector('input').checked ? 'green' : 'blue';
+                rb.querySelector('span').style.opacity = rb.querySelector('input').checked ? 1 : 0.2;
+            });
+        };
+
+        
+        radioButtons.forEach(radioButton => {
+            radioButton.querySelector('input').addEventListener('change', updateColors);
+        });
+        updateColors();
+
+        let originalTexture = null;
+        modelViewer.addEventListener('load', function() {
+            const material = modelViewer.model.materials[0];
+            originalTexture = material.pbrMetallicRoughness.baseColorTexture.texture;
+        });
+
+        radioButtons[0].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(originalTexture);
+                modelViewer.style.display = "block";
+                imageElement.style.display = "none";
+            }
+        });
+        radioButtons[1].querySelector('input').addEventListener('change', function() {
+            const material = modelViewer.model.materials[0];
+            const texture = material.pbrMetallicRoughness.baseColorTexture.texture;
+            if (this.checked) {
+                const material = modelViewer.model.materials[0];
+                material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
+                modelViewer.style.display = "block";
+                imageElement.style.display = "none";
+
+            }
+        });
+        radioButtons[2].querySelector('input').addEventListener('change', function() {
+            if (this.checked) {
+                modelViewer.style.display = "none";
+                imageElement.style.display = "block";
+            }
+        });
+
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'controls';
+        radioButtons.forEach(radioButton => controlsDiv.appendChild(radioButton));
+        modelDiv.appendChild(controlsDiv);
+
+        modelDiv.appendChild(imageElement);
+        modelDiv.appendChild(modelViewer); // Append model viewer first
+        modelDiv.appendChild(modelViewerDiv);
+
+        return modelDiv;
+    }
