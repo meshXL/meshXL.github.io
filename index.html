@@ -353,8 +353,8 @@
         modelViewerDiv.className = 'render_wrapper';
         const modelViewer = document.createElement('model-viewer');
         // ... set modelViewer properties ...
-        modelViewer.src = "./gallery/" + modelPath;
-        modelViewer.alt = 'D""escription of model';
+        modelViewer.src = "./image_models/" + modelPath + ".glb";
+        modelViewer.alt = 'Description of model';
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('camera-controls', '');
         modelViewer.style.width = '100%';
@@ -432,14 +432,14 @@
         modelViewerDiv.className = 'render_wrapper';
         const modelViewer = document.createElement('model-viewer');
         // ... set modelViewer properties ...
-        modelViewer.src = "./gallery/objaverse/" + modelPath + ".glb";
+        modelViewer.src = "./models/" + modelPath + ".glb";
         modelViewer.alt = 'Description of model';
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('camera-controls', '');
         modelViewer.style.width = '100%';
         modelViewer.style.height = '100%';
         modelViewer.style.backgroundColor = 'transparent';
-        modelViewer.setAttribute('camera-orbit', '50deg 75deg 10m');
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 3m');
 
 
         const radioButtons = createRadioButtons_uncondition('display-option-' + index);
@@ -478,6 +478,7 @@
                 const material = modelViewer.model.materials[0];
                 material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
                 modelViewer.style.display = "block";
+
             }
         });
 
@@ -492,7 +493,7 @@
         return modelDiv;
     }
 
-    function createModelView_texturing(modelPath, index) {
+    function createModelView_text(modelPath, index) {
         const modelDiv = document.createElement('div');
         modelDiv.className = 'item render_wrapper';
         
@@ -501,15 +502,14 @@
         modelViewerDiv.className = 'render_wrapper';
         const modelViewer = document.createElement('model-viewer');
         // ... set modelViewer properties ...
-        modelViewer.src = "./gallery/objaverse/" + modelPath + ".glb";
+        modelViewer.src = "./text_models/" + modelPath + ".glb";
         modelViewer.alt = 'Description of model';
         modelViewer.setAttribute('auto-rotate', '');
         modelViewer.setAttribute('camera-controls', '');
         modelViewer.style.width = '100%';
         modelViewer.style.height = '100%';
         modelViewer.style.backgroundColor = 'transparent';
-        modelViewer.setAttribute('camera-orbit', '50deg 75deg 10m');
-
+        modelViewer.setAttribute('camera-orbit', '50deg 75deg 3m');
 
         const radioButtons = createRadioButtons_uncondition('display-option-' + index);
         const updateColors = () => {
@@ -547,12 +547,65 @@
                 const material = modelViewer.model.materials[0];
                 material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
                 modelViewer.style.display = "block";
+
             }
         });
 
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'controls';
         radioButtons.forEach(radioButton => controlsDiv.appendChild(radioButton));
+
+        const dialogBox = document.createElement('div');
+        dialogBox.className = 'dialog-box';
+        dialogBox.style.position = 'absolute'; 
+        dialogBox.style.display = 'none'; 
+        dialogBox.style.top = '30px';  
+        dialogBox.style.right = '0';
+        
+        const descriptionCheckbox = document.createElement('input');
+        descriptionCheckbox.type = 'checkbox';
+        descriptionCheckbox.id = 'descriptionCheckbox-' + index;
+        descriptionCheckbox.style.opacity = "0";
+
+        const descriptionLabel = document.createElement('label'); 
+        descriptionLabel.htmlFor = descriptionCheckbox.id; 
+
+        const span = document.createElement('span');
+        span.innerHTML = 'Show Description';
+        span.style.position = 'relative';
+        span.style.top = '-7px';
+        span.style.marginLeft='10px';
+        span.style.whiteSpace = 'nowrap';
+
+        descriptionLabel.appendChild(span);
+
+
+        const descriptionText = "this is a test this is a test this is a test this is a test this is a test"; // 
+
+        descriptionCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                // dialogBox.innerHTML = descriptionText;
+                // dialogBox.style.display = 'block';
+                
+                fetch("./text/" + modelPath + ".txt")
+                    .then(response => response.text())
+                    .then(text => {
+                        dialogBox.innerHTML = text;
+                        dialogBox.style.display = 'block';
+                    })
+                    .catch(error => console.error(error));
+            } else {
+                dialogBox.style.display = 'none';
+            }
+        });
+
+        const checkboxWrapper = document.createElement('div');
+        checkboxWrapper.style.position = 'relative'; 
+        checkboxWrapper.appendChild(descriptionCheckbox);
+        checkboxWrapper.appendChild(dialogBox);
+        checkboxWrapper.appendChild(descriptionLabel);
+        controlsDiv.appendChild(checkboxWrapper); 
+
         modelDiv.appendChild(controlsDiv);
 
         modelDiv.appendChild(modelViewer); // Append model viewer first
