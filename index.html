@@ -636,13 +636,17 @@
              <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
                  <img src="./static/imgs/objaverse.png" alt="objaverse" style="width: 70%; height: auto; margin-top: 10px;">
              </div>
-             <p style="text-align: center">
+             <p>
                 MeshXL generates high-quality and diverse 3D meshes.
+                We show the 3D mesh grid of selected generated objects below.
             </p>
             <video id="teaser" autoplay muted playsinline loop height="100%">
                 <source src="./static/videos/objaverse_mesh_grid.mp4"
                         type="video/mp4">
             </video>
+            <p>
+                Below showcases some of the generated 3D meshes. Feel free to drag your mouse for a closer look.
+            </p>
             <div id="results-carousel2" class="carousel results-carousel"></div>
         </div>
     </div>
@@ -661,10 +665,27 @@
     </div>
 </section>
 
+
+<section class="hero">
+   <div class="hero-body">
+       <div class="container is-max-desktop">
+           <h1 class="title is-4">Unconditional texture generation</h1>
+           <div id="results-carousel1" class="carousel results-carousel"></div>
+       </div>
+   </div>
+</section>
+
+
 <script>
-    // const modelPaths1 = [
-    // "a770cb6ad4a97df84abd45348d17aaf8",
-    // ];
+    const modelPaths1 = [
+        "a770cb6ad4a97df84abd45348d17aaf8",
+        "a770cb6ad4a97df84abd45348d17aaf8",
+        "a770cb6ad4a97df84abd45348d17aaf8",
+        "a770cb6ad4a97df84abd45348d17aaf8",
+        "a770cb6ad4a97df84abd45348d17aaf8",
+        "a770cb6ad4a97df84abd45348d17aaf8",
+        "a770cb6ad4a97df84abd45348d17aaf8",
+    ];
 
     const modelPaths2 = [
         "objaverse-00001",
@@ -701,7 +722,7 @@
     ];
 
 
-    // createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
+    createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
     createCarousel(modelPaths2, 'results-carousel2', createModelView_image);
     createCarousel(modelPaths3, 'results-carousel3', createModelView_text);
 
