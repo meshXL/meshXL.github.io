@@ -647,7 +647,7 @@
             <p>
                 Below showcases some of the generated 3D meshes. Feel free to drag your mouse for a closer look.
             </p>
-            <div id="results-carousel2" class="carousel results-carousel"></div>
+            <div id="results-carousel1" class="carousel results-carousel"></div>
         </div>
     </div>
 </section>
@@ -660,7 +660,10 @@
              <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
                  <img src="./static/imgs/shapenet.png" alt="shapenet" style="width: 80%; height: auto; margin-top: 10px;">
              </div>
-            <div id="results-carousel3" class="carousel results-carousel"></div>
+             <p>
+                MeshXL can serve as a 3D foundation model that can be fine-tuned to produce high-quality 3D meshes on a specific category.
+             </p>
+            <div id="results-carousel2" class="carousel results-carousel"></div>
         </div>
     </div>
 </section>
@@ -670,24 +673,21 @@
    <div class="hero-body">
        <div class="container is-max-desktop">
            <h1 class="title is-4">Unconditional texture generation</h1>
-           <div id="results-carousel1" class="carousel results-carousel"></div>
+           <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+                <img src="./static/imgs/texturing.png" alt="texturing" style="width: 80%; height: auto; margin-top: 10px;">
+            </div>
+            <p>
+                MeshXL can serve as a 3D foundation model that can be fine-tuned to produce high-quality 3D meshes on a specific category.
+            </p>
+           <div id="results-carousel3" class="carousel results-carousel"></div>
        </div>
    </div>
 </section>
 
 
 <script>
+    
     const modelPaths1 = [
-        "0e06763d63f44733b99c06ae18dcb13d",
-        "0e06763d63f44733b99c06ae18dcb13d",
-        "0e06763d63f44733b99c06ae18dcb13d",
-        "0e06763d63f44733b99c06ae18dcb13d",
-        "0e06763d63f44733b99c06ae18dcb13d",
-        "0e06763d63f44733b99c06ae18dcb13d",
-        "0e06763d63f44733b99c06ae18dcb13d",
-    ];
-
-    const modelPaths2 = [
         "objaverse-00001",
         "objaverse-00002",
         "objaverse-00003",
@@ -710,7 +710,7 @@
         "objaverse-00020",
     ];
 
-    const modelPaths3 = [
+    const modelPaths2 = [
         "Suzanne_monkey",
         "Utah_teapot",
         "be48f3f906ed431b98b1bf03ab7aadd6",
@@ -721,10 +721,19 @@
         "nascar",
     ];
 
+    const modelPaths3 = [
+        "textured-00245",
+        "textured-00299",
+        "textured-00449",
+        "textured-00451",
+        "textured-00540",
+        "textured-01730",
+        "textured-01920",
+    ];
 
-    createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
-    createCarousel(modelPaths2, 'results-carousel2', createModelView_image);
-    createCarousel(modelPaths3, 'results-carousel3', createModelView_text);
+    createCarousel(modelPaths1, 'results-carousel1', createModelView_image);
+    createCarousel(modelPaths2, 'results-carousel2', createModelView_text);
+    createCarousel(modelPaths3, 'results-carousel3', createModelView_uncondition);
 
 </script>
 
@@ -768,49 +777,6 @@
         </div>
     </div>
  </section> -->
-
-
-<script>
-    
-    const modelPaths4 = [
-        "objaverse-00001",
-        "objaverse-00002",
-        "objaverse-00003",
-        "objaverse-00004",
-        "objaverse-00005",
-        "objaverse-00006",
-        "objaverse-00007",
-        "objaverse-00008",
-        "objaverse-00009",
-        "objaverse-00010",
-        "objaverse-00011",
-        "objaverse-00012",
-        "objaverse-00013",
-        "objaverse-00014",
-        "objaverse-00015",
-        "objaverse-00016",
-        "objaverse-00017",
-        "objaverse-00018",
-        "objaverse-00019",
-        "objaverse-00020",
-    ];
-
-    const modelPaths5 = [
-        "00245",
-        "00299",
-        "00449",
-        "00451",
-        "00540",
-        "01730",
-        "01920",
-    ];
-
-
-    // createCarousel(modelPaths1, 'results-carousel1', createModelView_uncondition);
-    // createCarousel(modelPaths4, 'results-carousel1', createModelView_image);
-    // createCarousel(modelPaths5, 'results-carousel2', createModelView_text);
-
-</script>
 
 
 
